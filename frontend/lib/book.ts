@@ -22,11 +22,12 @@ export async function getBookById(id: number): Promise<Book | undefined> {
   return res.json();
 }
 
-export async function updateBook(book: Book) {
+export async function updateBook(book: Book, accessToken: string) {
   const res = await fetch(`${config.apiBaseUrl}/books/${book.bookId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(book),
   });
@@ -38,11 +39,12 @@ export async function updateBook(book: Book) {
   return res.json();
 }
 
-export async function addBook(book: Omit<Book, 'bookId'>) {
+export async function addBook(book: Omit<Book, 'bookId'>, accessToken: string) {
   const res = await fetch(`${config.apiBaseUrl}/books`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(book),
   });
@@ -54,9 +56,12 @@ export async function addBook(book: Omit<Book, 'bookId'>) {
   return res.json();
 }
 
-export async function deleteBook(id: number) {
+export async function deleteBook(id: number, accessToken: string) {
   const res = await fetch(`${config.apiBaseUrl}/books/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
 
   if (!res.ok) {

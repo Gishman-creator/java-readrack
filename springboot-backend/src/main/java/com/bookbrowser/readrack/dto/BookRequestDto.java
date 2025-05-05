@@ -17,6 +17,10 @@ public class BookRequestDto {
 
     private String description; // Optional
 
+    private String imageUrl; // Optional
+
+    private String bookUrl; // Optional
+
     @NotNull(message = "Author IDs must be provided")
     @Size(min = 1, message = "At least one author ID is required")
     private List<Long> authorIds; // Array of Author IDs

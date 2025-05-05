@@ -1,8 +1,11 @@
 "use client"
 
-import type React from "react"
+import React from 'react';
+
+
 
 import { useState } from "react"
+import { putFile } from "@/lib/putFile";
 import Image from "next/image"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -23,40 +26,48 @@ export default function AddAuthorModal({ isOpen, onClose, handleAddAuthor }: Add
   const [name, setName] = useState("")
   const [birthdate, setBirthdate] = useState("")
   const [bio, setBio] = useState("")
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      setImageFile(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleSubmit = async () => {
-    // In a real app, you would save the author to your database here
-    console.log("Saving author:", {
-      name,
-      birthdate,
-      bio,
-      imageUrl: imagePreview,
-    })
+    let imageUrl: string | null = null;
+
+    if (imageFile) {
+      const uploadedImageUrl = await putFile(imageFile);
+      if (uploadedImageUrl) {
+        imageUrl = uploadedImageUrl;
+      } else {
+        console.error('Error uploading image');
+        return;
+      }
+    }
+
+    console.log('imageUrl', imageUrl)
 
     const newAuthor = await addAuthor({
       name,
       birthdate,
       bio,
-    });
+      imageUrl: imageUrl,
+    }, localStorage.getItem('accessToken') || '');
 
     handleAddAuthor(newAuthor);
 
-    // Reset form and close modal
-    resetForm()
-    onClose()
-  }
+    resetForm();
+    onClose();
+  };
 
   const resetForm = () => {
     setName("")

@@ -33,6 +33,8 @@ public class Author {
     @Column(length = 2000)
     private String bio;
 
+    private String imageUrl;
+
     // Defines the relationship back to the AuthorBook join table
     // CascadeType.ALL means operations (persist, merge, remove, refresh, detach) on Author cascade to AuthorBook
     // orphanRemoval = true means if an AuthorBook is removed from this set, it gets deleted from the DB

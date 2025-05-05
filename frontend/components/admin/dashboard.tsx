@@ -63,10 +63,10 @@ export default function AdminDashboard() {
 
     try {
       if (activeTab === "books") {
-        await deleteBook(itemToDeleteId);
+        await deleteBook(itemToDeleteId, localStorage.getItem('accessToken') || '');
         setBooks((prevBooks) => prevBooks.filter((book) => book.bookId !== itemToDeleteId));
       } else {
-        await deleteAuthor(itemToDeleteId);
+        await deleteAuthor(itemToDeleteId, localStorage.getItem('accessToken') || '');
         setAuthors((prevAuthors) => prevAuthors.filter((author) => author.authorId !== itemToDeleteId));
       }
     } catch (error) {

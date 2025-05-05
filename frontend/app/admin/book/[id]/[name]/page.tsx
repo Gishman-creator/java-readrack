@@ -56,7 +56,7 @@ export default async function AdminBookPage({ params }: AdminBookPageProps) {
           <div className="md:self-start md:sticky md:top-8">
             <div className="relative h-[390px] w-full bg-gray-100 rounded-lg overflow-hidden shadow-md">
               <Image
-                src="/placeholder.png"
+                src={book.imageUrl || "/placeholder.png"}
                 alt={`Cover of`}
                 fill
                 className="object-cover"

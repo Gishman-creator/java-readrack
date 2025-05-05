@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
+import { putFile } from "@/lib/putFile";
 import Image from "next/image"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -36,7 +37,8 @@ export default function AddBookModal({ isOpen, onClose, handleAddBook }: AddBook
   const [selectedAuthors, setSelectedAuthors] = useState<AuthorBadge[]>([])
   const [readers, setReaders] = useState(0)
   const [description, setDescription] = useState("")
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [authors, setAuthors] = useState<AuthorSearchDto[]>([])
   const [searchValue, setSearchValue] = useState("")
 
@@ -51,15 +53,16 @@ export default function AddBookModal({ isOpen, onClose, handleAddBook }: AddBook
   }, [])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      setImageFile(file);
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const removeAuthor = (authorId: number) => {
     setSelectedAuthors(selectedAuthors.filter((author) => author.authorId !== authorId))
@@ -74,14 +77,19 @@ export default function AddBookModal({ isOpen, onClose, handleAddBook }: AddBook
   }
 
   const handleSubmit = async () => {
-    // In a real app, you would save the book to your database here
-    console.log("Saving book:", {
-      name,
-      authors: selectedAuthors,
-      authorIds: selectedAuthors.map((author) => author.authorId),
-      readers: readers || 0,
-      description,
-    });
+    let imageUrl: string | null = null;
+
+    if (imageFile) {
+      const uploadedImageUrl = await putFile(imageFile);
+      if (uploadedImageUrl) {
+        imageUrl = uploadedImageUrl;
+      } else {
+        console.error('Error uploading image');
+        return;
+      }
+    }
+
+    console.log('imageUrl', imageUrl)
 
     try {
       const newBook = await addBook({
@@ -89,12 +97,13 @@ export default function AddBookModal({ isOpen, onClose, handleAddBook }: AddBook
         authors: selectedAuthors,
         authorIds: selectedAuthors.map((author) => author.authorId),
         readers: readers || 0,
-        description
-      });
+        description,
+        imageUrl: imageUrl,
+        bookUrl: null
+      }, localStorage.getItem('accessToken') || '');
 
       handleAddBook(newBook);
 
-      // Reset form and close modal
       resetForm();
       onClose();
     } catch (error) {

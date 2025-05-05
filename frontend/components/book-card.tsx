@@ -23,7 +23,7 @@ export default function BookCard({ book, role }: BookCardProps) {
       <Link href={bookUrl} className="block">
         <div className="relative h-[300px] w-full bg-gray-100">
           <Image
-            src="/placeholder.png"
+            src={book.imageUrl || "/placeholder.png"}
             alt={`Cover of ${book.name}`}
             fill
             className="object-cover"

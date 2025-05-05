@@ -65,6 +65,7 @@ public class AuthorService {
         dto.setName(author.getName());
         dto.setBirthdate(author.getBirthdate());
         dto.setBio(author.getBio());
+        dto.setImageUrl(author.getImageUrl());
 
         // Example: Populate book IDs (requires fetching AuthorBook or accessing Book)
         // This assumes author.getAuthorBooks() is accessible and populated.
@@ -92,6 +93,7 @@ public class AuthorService {
         existingAuthor.setName(authorDetails.getName());
         existingAuthor.setBirthdate(authorDetails.getBirthdate());
         existingAuthor.setBio(authorDetails.getBio());
+        existingAuthor.setImageUrl(authorDetails.getImageUrl());
         // ID should not be changed
 
         log.info("Updated author with ID: {}", existingAuthor.getAuthorId());

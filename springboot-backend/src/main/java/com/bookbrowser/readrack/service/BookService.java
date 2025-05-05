@@ -47,6 +47,8 @@ public class BookService {
         book.setName(bookRequestDto.getName());
         book.setReaders(bookRequestDto.getReaders());
         book.setDescription(bookRequestDto.getDescription());
+        book.setImageUrl(bookRequestDto.getImageUrl());
+        book.setBookUrl(bookRequestDto.getBookUrl());
         Book savedBook = bookRepository.save(book); // Save book first to get its generated ID
         log.info("Created book with ID: {}", savedBook.getBookId());
 
@@ -115,6 +117,8 @@ public class BookService {
         existingBook.setName(bookRequestDto.getName());
         existingBook.setReaders(bookRequestDto.getReaders());
         existingBook.setDescription(bookRequestDto.getDescription());
+        existingBook.setImageUrl(bookRequestDto.getImageUrl());
+        existingBook.setBookUrl(bookRequestDto.getBookUrl());
         log.debug("Updated properties for book ID: {}", bookId);
 
         // 3. Find the new set of authors
@@ -227,6 +231,8 @@ public class BookService {
         dto.setName(book.getName());
         dto.setReaders(book.getReaders());
         dto.setDescription(book.getDescription());
+        dto.setImageUrl(book.getImageUrl());
+        dto.setBookUrl(book.getBookUrl());
         dto.setAuthors(authorSummaries); // Set the list of author summaries
         return dto;
     }

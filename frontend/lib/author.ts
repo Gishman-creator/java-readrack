@@ -21,11 +21,12 @@ export async function getAuthorById(id: number): Promise<Author | undefined> {
   return res.json();
 }
 
-export async function updateAuthor(author: Author) {
+export async function updateAuthor(author: Author, accessToken: string) {
   const res = await fetch(`${config.apiBaseUrl}/authors/${author.authorId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(author),
   });
@@ -45,11 +46,12 @@ export async function searchAuthors() {
   return res.json();
 }
 
-export async function addAuthor(author: Omit<Author, "authorId">) {
+export async function addAuthor(author: Omit<Author, "authorId">, accessToken: string) {
   const res = await fetch(`${config.apiBaseUrl}/authors`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(author),
   });
@@ -61,10 +63,15 @@ export async function addAuthor(author: Omit<Author, "authorId">) {
   return res.json();
 }
 
-export async function deleteAuthor(id: number) {
+export async function deleteAuthor(id: number, accessToken: string) {
   const res = await fetch(`${config.apiBaseUrl}/authors/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
+
+  console.log('accessToken', accessToken)
 
   if (!res.ok) {
     throw new Error("Failed to delete author");

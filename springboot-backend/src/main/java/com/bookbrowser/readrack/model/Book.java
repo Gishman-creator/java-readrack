@@ -32,6 +32,10 @@ public class Book {
     @Column(length = 2000)
     private String description;
 
+    private String imageUrl;
+
+    private String bookUrl;
+
     // Defines the relationship back to the AuthorBook join table
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<AuthorBook> authorBooks = new HashSet<>();

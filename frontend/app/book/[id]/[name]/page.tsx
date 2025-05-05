@@ -31,7 +31,7 @@ export default async function BookPage({ params: { id, name } }: BookPageProps) 
           <div className="md:self-start md:sticky md:top-8">
             <div className="relative h-[400px] w-full bg-gray-100 rounded-lg overflow-hidden shadow-md">
               <Image
-                src="/placeholder.png"
+                src={book.imageUrl || "/placeholder.png"}
                 alt={`Cover of ${book.name}`}
                 fill
                 className="object-cover"

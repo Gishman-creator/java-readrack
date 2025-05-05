@@ -33,11 +33,12 @@ export default function EditAuthorForm({ author }: EditAuthorFormProps) {
         name,
         birthdate,
         bio,
+        imageUrl: author.imageUrl
       };
 
       console.log('updatedAuthorData', updatedAuthorData)
 
-      await updateAuthor(updatedAuthorData);
+      await updateAuthor(updatedAuthorData,  localStorage.getItem('accessToken') || '');
       router.refresh();
 
     } catch (error) {

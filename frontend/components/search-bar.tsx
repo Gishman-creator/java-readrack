@@ -94,7 +94,7 @@ const SearchBar = () => {
                 onClick={() => handleResultClick(book)}
               >
                 <img
-                  src="/placeholder.png"
+                  src={book.imageUrl || "/placeholder.png"}
                   alt={book.name}
                   className="w-16 h-20 object-cover rounded-md mr-4"
                 />

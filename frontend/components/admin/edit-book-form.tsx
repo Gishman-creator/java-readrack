@@ -57,9 +57,11 @@ export default function EditBookForm({ book, authors }: EditBookFormProps) {
         })),
         authorIds: selectedAuthors.map((author) => author.authorId),
         description: description,
+        imageUrl: book.imageUrl,
+        bookUrl: book.bookUrl
       };
 
-      await updateBook(updatedBookData);
+      await updateBook(updatedBookData, localStorage.getItem('accessToken') || '');
 
       router.refresh();
 

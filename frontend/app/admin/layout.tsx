@@ -39,7 +39,7 @@ export default function RootLayout({
     checkAuth();
   }, [router]);
 
-  if (isLoading) {
+  if (isLoading || !isAuthenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white">
         <svg className="animate-spin h-12 w-12 mr-2" viewBox="0 0 24 24">

@@ -13,13 +13,13 @@ public class BookRequestDto {
     @NotEmpty(message = "Book name cannot be empty")
     private String name;
 
-    private Integer readers; // Optional
+    private Integer readers;
 
-    private String description; // Optional
+    private String description;
 
-    private String imageUrl; // Optional
+    private String imageUrl;
 
-    private String bookUrl; // Optional
+    private String bookUrl;
 
     @NotNull(message = "Author IDs must be provided")
     @Size(min = 1, message = "At least one author ID is required")

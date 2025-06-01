@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/lib/auth";
+import Link from "next/link"; // Import Link
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -66,6 +67,11 @@ export default function LoginForm() {
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
+        </div>
+        <div className="text-right text-sm">
+          <Link href="/forgot-password" className="text-blue-600 hover:underline">
+            Forgot password?
+          </Link>
         </div>
       </div>
 

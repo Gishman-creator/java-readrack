@@ -1,3 +1,4 @@
+'use client';
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,6 +11,8 @@ import { Book } from "@/types/book";
 import config from "@/frontend-config.json";
 import { getBookById } from "@/lib/book";
 import BookCard from "@/components/book-card";
+import { use, useEffect, useState } from "react";
+import { Author } from "@/types/author";
 
 interface AdminAuthorPageProps {
   params: {
@@ -19,17 +22,32 @@ interface AdminAuthorPageProps {
 }
 
 export default async function AdminAuthorPage({ params }: AdminAuthorPageProps) {
-  const authorId = Number.parseInt(params.id);
-  const author = await getAuthorById(authorId);
+  const { id }: { id: string } = use(params as any);
+  const authorId = Number.parseInt(id);
+  const [author, setAuthor] = useState<Author | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedAuthor = await getAuthorById(authorId);
+
+      if (fetchedAuthor) {
+        setAuthor(fetchedAuthor);
+        setImageUrl(fetchedAuthor.imageUrl || "");
+      } else {
+        notFound();
+      }
+    };
+
+    fetchData();
+  }, [authorId]);
 
   if (!author) {
-    notFound();
+    return <div></div>;
   }
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <Navbar />
-
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center mb-6">
           <Link href="/admin" className="mr-4">
@@ -46,7 +64,7 @@ export default async function AdminAuthorPage({ params }: AdminAuthorPageProps) 
           <div className="md:self-start md:sticky md:top-8">
             <div className="relative h-[350px] w-full bg-gray-100 rounded-lg overflow-hidden shadow-md">
               <Image
-                src={author.imageUrl || "/placeholder.png?height=350&width=300"}
+                src={imageUrl || "/placeholder.png?height=350&width=300"}
                 alt={`Photo of ${author.name}`}
                 fill
                 className="object-cover"
@@ -56,7 +74,7 @@ export default async function AdminAuthorPage({ params }: AdminAuthorPageProps) 
 
           {/* Author Edit Form - Right Side (Scrollable) */}
           <div className="md:overflow-y-auto pr-2 h-full">
-            <EditAuthorForm author={author} />
+            <EditAuthorForm author={author} setImageUrl={setImageUrl} />
 
             <h2 className="text-2xl font-semibold mb-4 mt-8">Books by {author.name}</h2>
 

@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { ArrowDownToLine, CloudDownload } from "lucide-react"
 import AuthorLink from "@/components/author-link"
 import Navbar from "@/components/navbar"
 import config from "@/frontend-config.json"
@@ -41,7 +42,14 @@ export default async function BookPage({ params: { id, name } }: BookPageProps) 
 
           {/* Book Details - Right Side (Scrollable) */}
           <div className="md:overflow-y-auto pr-2 h-full">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">{book.name}</h1>
+            <div className="flex justify-between items-center mb-2">
+              <h1 className="text-3xl font-bold text-gray-800">{book.name}</h1>
+              {book.bookUrl && (
+                <Link title="Download Book" href={book.bookUrl} download target="_blank" className="text-gray-600 hover:text-gray-900">
+                  <ArrowDownToLine className="h-6 w-6" />
+                </Link>
+              )}
+            </div>
 
             <div className="text-lg text-gray-600 mb-6">
               by{" "}

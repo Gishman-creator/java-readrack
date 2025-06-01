@@ -16,12 +16,13 @@ import { Book } from "@/types/book";
 import { Author } from "@/types/author";
 import { deleteBook } from "@/lib/book";
 import DeleteConfirmationModal from "./delete-confirmation-modal";
+import toast from 'react-hot-toast';
 
 
 export default function AdminDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const tab = searchParams.get("tab");
+  const tab = searchParams?.get("tab");
   const [activeTab, setActiveTab] = useState(tab || "books");
   const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
   const [isAddAuthorModalOpen, setIsAddAuthorModalOpen] = useState(false);
@@ -155,7 +156,7 @@ export default function AdminDashboard() {
       {/* Modals */}
       <AddBookModal isOpen={isAddBookModalOpen} onClose={() => setIsAddBookModalOpen(false)} handleAddBook={handleAddBook} />
       <AddAuthorModal isOpen={isAddAuthorModalOpen} onClose={() => setIsAddAuthorModalOpen(false)} handleAddAuthor={handleAddAuthor} />
-       <DeleteConfirmationModal
+      <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}

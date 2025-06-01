@@ -37,7 +37,6 @@ public class Author {
 
     // Defines the relationship back to the AuthorBook join table
     // CascadeType.ALL means operations (persist, merge, remove, refresh, detach) on Author cascade to AuthorBook
-    // orphanRemoval = true means if an AuthorBook is removed from this set, it gets deleted from the DB
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<AuthorBook> authorBooks = new HashSet<>();
 
@@ -51,8 +50,6 @@ public class Author {
     private void ensureId(){
         if (this.authorId == null) {
             this.authorId = IdGenerator.generateRandom10DigitId();
-            // Optional: Add logic here to check if the generated ID already exists
-            // in the database and regenerate if necessary, though collisions are unlikely.
         }
     }
 

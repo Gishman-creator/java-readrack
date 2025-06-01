@@ -1,14 +1,17 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { use } from 'react';
 
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/navbar";
 import EditBookForm from "@/components/admin/edit-book-form";
 import { getBookById } from "@/lib/book";
-import { Book } from "@/types/book";
 import { searchAuthors } from "@/lib/author";
+import { Book } from "@/types/book";
 
 interface AdminBookPageProps {
   params: {
@@ -22,24 +25,37 @@ interface AuthorSearchDto {
   name: string;
 }
 
-interface EditBookFormProps {
-  book: Book;
-  authors: AuthorSearchDto[];
-}
+export default function AdminBookPage({ params }: AdminBookPageProps) {
+  const { id }: { id: string } = use(params as any);
+  const bookId = Number.parseInt(id);
+  const [book, setBook] = useState<Book | null>(null);
+  const [authors, setAuthors] = useState<AuthorSearchDto[]>([]);
+  const [imageUrl, setImageUrl] = useState("");
 
-export default async function AdminBookPage({ params }: AdminBookPageProps) {
-  const bookId = Number.parseInt(params.id);
-  const book = await getBookById(bookId);
-  const authors = await searchAuthors();
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedBook = await getBookById(bookId);
+      const fetchedAuthors = await searchAuthors();
+
+      if (fetchedBook) {
+        setBook(fetchedBook);
+        setImageUrl(fetchedBook.imageUrl || "");
+      } else {
+        notFound();
+      }
+
+      setAuthors(fetchedAuthors);
+    };
+
+    fetchData();
+  }, [bookId]);
 
   if (!book) {
-    notFound();
+    return <div></div>;
   }
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <Navbar />
-
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center mb-6">
           <Link href="/admin" className="mr-4">
@@ -56,7 +72,7 @@ export default async function AdminBookPage({ params }: AdminBookPageProps) {
           <div className="md:self-start md:sticky md:top-8">
             <div className="relative h-[390px] w-full bg-gray-100 rounded-lg overflow-hidden shadow-md">
               <Image
-                src={book.imageUrl || "/placeholder.png"}
+                src={imageUrl || "/placeholder.png"}
                 alt={`Cover of`}
                 fill
                 className="object-cover"
@@ -66,7 +82,7 @@ export default async function AdminBookPage({ params }: AdminBookPageProps) {
 
           {/* Book Edit Form - Right Side (Scrollable) */}
           <div className="md:overflow-y-auto pr-2 h-full">
-            <EditBookForm book={book} authors={authors} />
+            <EditBookForm book={book} authors={authors} setImageUrl={setImageUrl} />
           </div>
         </div>
       </div>
